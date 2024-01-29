@@ -1,0 +1,419 @@
+﻿
+@{
+    ViewData["Title"] = "Get";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center">Libros</h2>
+
+<div class="text-center">
+    <button class="btn btn-success m-3" onclick="showModal()">Agregar</button>
+</div>
+<hr>
+
+<div>
+<div class="form-group d-flex justify-content-center m-2">
+    <input type="text" class="form-control" id="txtBusqueda" placeholder="Ingresa el autor, titulo o año de publicacaion" />
+</div>
+    <div class="container text-center">
+        <div class="row align-items-start">
+            <div class="col">
+                <button type="button" class="btn btn-primary" onclick="GetAutor()">Autor</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-primary" onclick="GetTitulo()">Titulo</button>
+
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-primary" onclick="GetAnio()">Año</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+<di style="display: block;" id="alerta">
+<div class="alert alert-secondary" role="alert" >
+    Realiza una busqueda
+</div>
+</di>
+
+<div id="Tabla" class="col-md-12" style="display: none;">
+    <table id="tablaEmpleado" class="table table-hover" border="1" >
+        <thead class="table-dark">
+            <tr>
+                <th class="text-center" scope="col">Titulo</th>
+                <th class="text-center" scope="col">Año de publicacion</th>
+                <th class="text-center" scope="col">Autor</th>
+                <th class="text-center" scope="col">Editorial</th>
+            </tr>
+
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+    <hr>
+
+    <div>
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-4">
+                    <button class="btn btn-danger m-3" onclick="showModale()">Editorial</button>
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-danger m-3" onclick="showModala()">Autor</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@* 
+Modal Para agregar *@
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" onclick="modalClose()">×</button>
+                <h4 class="modal-title">Formulario Libro</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group d-flex justify-content-center m-2">
+                        <input type="text" class="form-control" id="txtTitulo" placeholder="Titulo" />
+                    </div>
+                    <div class="form-group d-flex justify-content-center m-2">
+                        <input type="text" class="form-control" id="txtAnioPub" placeholder="Año de Publicacion" />
+                    </div>
+                    <div class="form-group d-flex justify-content-center m-2">
+                        <select class="form-control" id="ddlAutor">
+                            <option value="0">Selecciona un valor</option>
+                        </select>
+                    </div>
+                    <div class="form-group d-flex justify-content-center m-2">
+                        <select class="form-control" id="ddlEditorial">
+                            <option value="0">Selecciona un valor</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success m-1" id="btnUpdate" onclick="Add()">Guardar</button>
+                <button type="button" class="btn btn-danger m-1" data-dismiss="modal" onclick="modalClose()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Modal para eliminar por autor  *@
+<div class="modal fade" id="modalAutor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" onclick="modalClose()">×</button>
+                <h4 class="modal-title">Formulario Libro</h4>
+            </div>
+
+            <div class="modal-body">
+                <form>
+         
+                    <div class="form-group d-flex justify-content-center m-2">
+                        <select class="form-control" id="ddlAutorEliminar">
+                            <option value="0">Selecciona un valor</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning m-1" id="btnUpdate" onclick="DeleteAutor()">Eliminar</button>
+                <button type="button" class="btn btn-danger m-1" data-dismiss="modal" onclick="modalClose()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Modal Par eliminar por editorial *@
+<div class="modal fade" id="modalEditorial" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" onclick="modalClose()">×</button>
+                <h4 class="modal-title">Formulario Libro</h4>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    
+                    <div class="form-group d-flex justify-content-center m-2">
+                        <select class="form-control" id="ddlEditorialEliminar">
+                            <option value="0">Selecciona un valor</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning m-1" id="btnUpdate" onclick="DeleteEditorial()">Elimnar</button>
+                <button type="button" class="btn btn-danger m-1" data-dismiss="modal" onclick="modalClose()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () { //click
+        GetAllAutor();
+        GetAllEditoria();
+    });
+
+    function showModal() {
+        $('#modal').modal("show");
+    }
+
+    function modalClose() {
+        $('#modal').modal("hide");
+        $('#modalEditorial').modal("hide");
+        $('#modalAutor').modal("hide");
+    }
+    function showModale() {
+        $('#modalEditorial').modal("show");
+    }
+    function showModala() {
+        $('#modalAutor').modal("show");
+    }
+
+    function limpiarModal() {
+        $('#txtTitulo').val('');
+        $('#txtAnioPub').val('');
+        $('#ddlAutor option[value="0"]').attr("selected", true);
+        $('#ddlEditorial option[value="0"]').attr("selected", true);
+    }
+    function GetAutor() {
+        var NombreA = {
+            Nombre: $('#txtBusqueda').val(),
+        }
+
+        $.ajax({
+
+            url: 'http://localhost:5141/api/Libro/getbyAutor/' + NombreA.Nombre,
+            type: 'GET',
+            success: function (result) {
+                console.log(result)
+                myFunction();
+                myFunctionA();
+                $('#txtBusqueda').val('');
+                $('#tablaEmpleado tbody').empty();
+                $.each(result, function (i, libro) {
+                    var filas =
+                        '<tr>'
+                        + "<td  id='id' class='text-center'>" + libro.titulo + "</td>"
+                        + "<td class='text-center'>" + libro.anioPublicacion + "</td>"
+                        + "<td class='text-center'>" + libro.autor.nombre + "</ td>"
+                        + "<td class='text-center'>" + libro.editorial.nombre + "</ td>"
+                        + "</tr>";
+                    $("#tablaEmpleado tbody").append(filas);
+                });
+            },
+            error: function (result) {
+                alert('Error en la consulta.' + result.responseJSON.ErrorMessage); //es un error de JSON, y es porque puede venir vacio o null
+            }
+        });
+    };
+    function GetTitulo() {
+        var NombreT = {
+            titulo: $('#txtBusqueda').val(),
+        }
+
+        $.ajax({
+
+            url: 'http://localhost:5141/api/Libro/getbytitulo/' + NombreT.titulo,
+            type: 'GET',
+            success: function (result) {
+                console.log(result)
+                myFunction();
+                myFunctionA();
+                $('#txtBusqueda').val('');
+                $('#tablaEmpleado tbody').empty();
+                $.each(result, function (i, libro) {
+                    var filas =
+                        '<tr>'
+                        + "<td  id='id' class='text-center'>" + libro.titulo + "</td>"
+                        + "<td class='text-center'>" + libro.anioPublicacion + "</td>"
+                        + "<td class='text-center'>" + libro.autor.nombre + "</ td>"
+                        + "<td class='text-center'>" + libro.editorial.nombre + "</ td>"
+                        + "</tr>";
+                    $("#tablaEmpleado tbody").append(filas);
+                });
+            },
+            error: function (result) {
+                alert('Error en la consulta.' + result.responseJSON.ErrorMessage); //es un error de JSON, y es porque puede venir vacio o null
+            }
+        });
+    };
+
+    function GetAnio() {
+        var anio = {
+            fecha: $('#txtBusqueda').val(),
+        }
+
+        $.ajax({
+
+            url: 'http://localhost:5141/api/Libro/getbyanio/' + anio.fecha,
+            type: 'GET',
+            success: function (result) {
+                console.log(result)
+                myFunction();
+                myFunctionA();
+                $('#txtBusqueda').val('');
+                $('#tablaEmpleado tbody').empty();
+                $.each(result, function (i, libro) {
+                    var filas =
+                        '<tr>'
+                        + "<td  id='id' class='text-center'>" + libro.titulo + "</td>"
+                        + "<td class='text-center'>" + libro.anioPublicacion + "</td>"
+                        + "<td class='text-center'>" + libro.autor.nombre + "</ td>"
+                        + "<td class='text-center'>" + libro.editorial.nombre + "</ td>"
+                        + "</tr>";
+                    $("#tablaEmpleado tbody").append(filas);
+                });
+            },
+            error: function (result) {
+                alert('Error en la consulta.' + result.responseJSON.ErrorMessage); //es un error de JSON, y es porque puede venir vacio o null
+            }
+        });
+    };
+
+    function GetAllAutor() {
+        $.ajax({
+            url: 'http://localhost:5141/api/Autor/GetAll',
+            type: 'GET',
+            success: function (result) {
+                console.log(result)
+                $.each(result, function (i, autor) {
+                    var filas =
+                        '<option value="' + autor.idAutor + '">' + autor.nombre + '</option>';
+                    $("#ddlAutor").append(filas);
+                    $("#ddlAutorEliminar").append(filas);
+                });
+            },
+            error: function (result) {
+                alert('Error .' + result.responseJSON.ErrorMessage);
+            }
+        });
+    }
+    function GetAllEditoria() {
+        $.ajax({
+            url: 'http://localhost:5141/api/Editorial/GetAll',
+            type: 'GET',
+            success: function (result) {
+                console.log(result)
+                $.each(result, function (i, editorial) {
+                    var filas =
+                        '<option value="' + editorial.idEditorial + '">' +editorial.nombre + '</option>';
+                    $("#ddlEditorial").append(filas);
+                    $("#ddlEditorialEliminar").append(filas);
+                });
+            },
+            error: function (result) {
+                alert('Error .' + result.responseJSON.ErrorMessage);
+            }
+        });
+    }
+
+    function DeleteAutor() {
+
+        if (confirm("¿Estas seguro de eliminar los libros?")) {
+            var json = {
+                idAutor: Math.floor($('#ddlAutorEliminar').val())
+            }
+            $.ajax({
+                type: 'DELETE',
+                url: 'http://localhost:5141/api/Libro/deleteautor/' + json.idAutor,
+                success: function (result) {
+                    alert("Libros eliminados correctamente");
+                    modalClose();
+                    
+                },
+                error: function (result) {
+                    alert('Error en la consulta.' + result.responseJSON.ErrorMessage);
+                }
+            });
+
+        };
+    };
+
+
+    function DeleteEditorial() {
+
+        if (confirm("¿Estas seguro de eliminar los libros?")) {
+            var json = {
+                idEditor: Math.floor($('#ddlEditorialEliminar').val())
+            }
+            $.ajax({
+                type: 'DELETE',
+                url: 'http://localhost:5141/api/Libro/deleteeditorial/' + json.idEditor,
+                success: function (result) {
+                    alert("Libros eliminados correctamente");
+                    modalClose();
+                },
+                error: function (result) {
+                    alert('Error en la consulta.' + result.responseJSON.ErrorMessage);
+                }
+            });
+
+        };
+    };
+    function Add() {
+
+
+        var json = {
+            titulo: $('#txtTitulo').val(),
+            anioPublicacion: $('#txtAnioPub').val(),
+            autor: {
+                idAutor: Math.floor($('#ddlAutor').val())
+            },
+            editorial: {
+                idEditorial: Math.floor($('#ddlEditorial').val())
+            }
+        }
+        $.ajax({
+
+            url: 'http://localhost:5141/api/Libro/',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(json),
+            success: function (result) {
+                alert("Libro dado de alta correctamente");
+                modalClose();
+                limpiarModal();
+                
+            },
+            error: function (result) {
+                console.log(result);
+                alert('Error en la consulta.' + result.responseJSON.ErrorMessage); //es un error de JSON, y es porque puede venir vacio o null
+            }
+        });
+
+    }
+    function myFunction() {
+        var x = document.getElementById("Tabla");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        }
+    }
+    function myFunctionA() {
+        var x = document.getElementById("alerta");
+        if (x.style.display === "block") {
+
+            x.style.display = "none";
+        }
+    }
+    
+</script>
